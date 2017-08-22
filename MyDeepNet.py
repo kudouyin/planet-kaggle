@@ -62,8 +62,6 @@ class Deep_Net(nn.Module):
         '''
         if model_name == "resnet50" or model_name == "resnet152" or model_name == "inception":
             #self.model.avgpool.register_forward_hook(self.extract_feature_0)
-            if model_name == "inception":
-                print("img size need > 299x299")
             self.model.fc.register_forward_hook(self.extract_feature)
         elif model_name == "densenet161" or model_name == "vgg19":
             self.model.classifier.register_forward_hook(self.extract_feature)
