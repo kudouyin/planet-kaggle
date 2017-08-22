@@ -122,7 +122,7 @@ def my_scorer(truth, pred):
     f2 = (1+4)*precise*recall/(4 * precise + recall + SMALL)
     return f2
 
-def get_random_split_file_list(root, index):
+def get_random_split_file_list(root, index, Fold = 10):
     '''
     random.seed(index)
     file_list = sorted(os.listdir(root))
@@ -134,10 +134,10 @@ def get_random_split_file_list(root, index):
     file_list = os.listdir(root)
     random.shuffle(file_list)
     length = len(file_list)
-    length_10 = int(length/10) + 1
+    length_fold = int(length/Fold) + 1
 
-    st = index * length_10
-    end = min(length, st + length_10)
+    st = index * length_fold
+    end = min(length, st + length_fold)
     val_list = sorted(file_list[st:end])
     train_list = sorted(list(set(file_list) - set(val_list)))
     return train_list, val_list
