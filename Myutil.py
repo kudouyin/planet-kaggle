@@ -156,12 +156,6 @@ def make_dataset_generator(root, batch_size, file_list=None, my_transforms=None)
             img_tensor = transforms.ToTensor()(img_tensor)
         else:
             img_tensor = transforms.ToTensor()(img.convert('RGB'))
-        if len(imgset) > 0 and imgset[-1].shape != img_tensor.numpy().shape:
-            imgset = np.array(imgset)
-            labelset = np.array(labelset)
-            yield imgset, labelset
-            imgset = []
-            labelset = []
         imgset.append(img_tensor.numpy())
 
         if fname in fname_to_label_tensor.keys():
