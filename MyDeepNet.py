@@ -14,22 +14,8 @@ import numpy as np
 from Pre_process import class_to_idx, idx_to_class, process, fname_to_label_tensor
 
 class Deep_Net(nn.Module):
-    def extract_feature_0(self, m, i, o):
-        feature = F.avg_pool2d(o, o.size(3))
-        print('QQQ', feature.view(feature.size(0), -1))
-
     def extract_feature(self, m, i, o):
-        '''
-        feature = F.avg_pool2d(o, o.size(3))
-        if self.features is not None:
-            #print 'self.feature: ' ,self.features.size(), feature.view(feature.size(0), -1).size()
-            self.features = torch.cat((self.features, feature.view(feature.size(0), -1)), dim=1)
-        else:
-            self.features = feature.view(feature.size(0), -1)
-        #print 'cnt: ', self.cnt, self.features.size()
-        '''
         self.features = i[0]
-        #print(self.features)
 
     def get_model_info_by_name(self, model_name):
         if model_name == "resnet50":
@@ -54,12 +40,7 @@ class Deep_Net(nn.Module):
         model, fc_num = self.get_model_info_by_name(model_name)
         self.model = model
         self.features = None
-        '''
-        self.model.layer1.register_forward_hook(self.extract_feature)
-        self.model.layer2.register_forward_hook(self.extract_feature)
-        self.model.layer3.register_forward_hook(self.extract_feature)
-        self.model.layer4.register_forward_hook(self.extract_feature)
-        '''
+
         if model_name == "resnet50" or model_name == "resnet152" or model_name == "inception":
             #self.model.avgpool.register_forward_hook(self.extract_feature_0)
             self.model.fc.register_forward_hook(self.extract_feature)
@@ -70,9 +51,6 @@ class Deep_Net(nn.Module):
     def forward(self, x):
         self.features = None
         x = self.model(x)
-        #print self.feature1.size(), self.feature2.size(),self.feature3.size(),self.feature4.size()
-        #x = torch.cat((self.feature1, self.feature2, self.feature3, self.feature4), dim=1)
-        #print self.features.size()
         return self.fc(self.features)
 
 
